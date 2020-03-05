@@ -5,8 +5,7 @@ const uiMongoBD = require('uriMongo.txt');
 
 const MongoClient = require('mongodb').MongoClient;
 
-const uri = "uriMongoBD";
-//const uri = "mongodb+srv://edersilva:edersilva@cluster0-zkcvv.mongodb.net/week10?retryWrites=true&w=majority";
+const uri = "uriMongoBD"; // esta variavel deve ser a URI do seu Banco de Dados
 
 MongoClient.connect(uri,(err, client) => {
    if (err) return console.log(err)
@@ -27,10 +26,11 @@ app.get('/', (req,res) => {
 
 app.get('/',(req, res) => {
     let cursor = db.collection('data').find()
-    //var cursor = db.collection('data').find()  estou na metade da pagina server
+    //var cursor = db.collection('data').find()  
 })
 
 app.get('/show', (req, res) => {
+
     db.collection('data').find().toArray((err, results) => {
         if (err) return console.log(err)
         res.render('show.ejs',{ data: results})
@@ -46,11 +46,12 @@ app.post('/show', (req, res) => {
 
     })
 
-app.route('/edit/:id')
+    //Metodo para Update
+app.route('/edit/:id') 
 .get((req, res) => {
     var id = req.params.id
 
-    db.collection('data').find(ObjectId(id)).toArray((err, result) => {
+    db.collection('data').find(ObjectId(id)).toArray((err, result) => { 
         if (err) return res.send(err)
         res.render('edit.ejs', {data: result})
     })
@@ -69,10 +70,20 @@ app.route('/edit/:id')
         if (err) return res.send(err)
         res.redirect('/show')
         console.log('Atualizado Banco de dados com sucesso !!!')
-    //}
     })
 })
-   
+
+//metodo para deletar
+app.route('/delete/:id')
+.get((req, res) => {
+  var id = req.params.id
+
+  db.collection('data').deleteOne({_id: ObjectId(id)}, (err, result) => {
+    if (err) return res.send(500, err)
+    console.log('Deletado do Banco de Dados!')
+    res.redirect('/show')
+    })
+})
 
 
 })
