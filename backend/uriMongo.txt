@@ -1,1 +1,0 @@
-uiMongoBD = "mongodb+srv://edersilva:edersilva@cluster0-zkcvv.mongodb.net/week10?retryWrites=true&w=majority"
